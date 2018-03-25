@@ -1,0 +1,58 @@
+---
+layout:     post
+title:      "浅析UIViewController的生命周期"
+subtitle:   ""
+date:       2015-05-25
+author:     "Alla"
+header-img: "img/post-bg-ios-uikit-uiviewcontroller.jpg"
+tags:
+- iOS
+- UIKit
+---
+
+为了研究UIViewController的生命周期，现在拿两个UIViewControllerA和B来做实验，点击A中的进入按钮会跳入B,在A中执行的跳转方法中用init方法初始化B，然后执行跳转操作，发现执行的方法顺序如下:
+> —>initWithNib
+
+> —>init
+
+> —>loadView
+
+> —>ViewDidLoad
+
+> —>ViewWillAppear
+
+> —>ViewDidAppear
+
+> —>ViewWillDisappear
+
+> —>ViewDidDisappear
+
+###流程：
+  
+当用init方法初始化B时，系统会先调用B的initWithNib方法。不管有没有对应的xib文件，B初始化的时候都会强制调用该方法。如果initWithNib的方法的表示nibname的参数是nil时，B的loadView方法会尝试加载名字和B的类名相同的xib文件，若该文件不存在，我们需要手动调用[self setView:(UIView *)view]方法或者重写loadView方法。从这可以看出，加载xib文件的重任是initWithNib方法和loadView方法共同来承担的。
+  
+以下是苹果官方文档关于initWithNib方法的说明:
+    
+     
+>The designated initializer. If you subclass UIViewController, you must call the super implementation of this method, even if you aren't using a NIB.  (As a convenience, the default init method will do this for you,and specify nil for both of this methods arguments.) In the specified NIB, the File's Owner proxy should have its class set to your view controller subclass, with the view outlet connected to the main view. If you invoke this method with a nil nib name, then this class' -loadView method will attempt to load a NIB whosename is the same as your view controller's class. If no such NIB in fact exists then you must either call -setView: before -view is invoked, or override the -loadView method to set up your views programatically.
+   
+也就是说如果有对应的xib文件的话，我们就不能调用[self setView:(UIView *)view]方法或者重写loadView方法了。
+
+如果我们需要手工维护子views，就需要调用或重写上述方法了。
+
+那么问题来了，如何重写loadView方法呢？在讨论这个问题之前，我们需要首先了解一下loadView方法的默认实现：先寻找有关可用的xib文件的信息，根据这个信息来加载xib文件，如果没有有关xib文件的信息，默认会实现一个空白的UIView对象，然后让这个对象成为controller的主View。所以，重载这个函数时，我们也应该这样，把子类的view赋给view属性，并且重载的这个函数不应该调用super。
+
+那么问题又来了，为什么不要调[super loadView]方法？因为系统首先会再次寻找对应的xib文件并且我们自定义的View最终会代替[super loadView]生成的View，这样做，多多少少会影响性能的。下面是一个重写的例子
+``` Objective-C
+- (void)loadView {
+    UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame];
+    [view setBackgroundColor:_color] ;
+    //add some subviews
+    self.view = view;
+}   
+``` 
+###有以下几点需要注意:
+
++ 当调用self.view时，如果此时值为nil，就会调用loadView方法。
++ loadView方法执行完以后必定会调用viewDidLoad方法，如果此时self.view还是nil，根据第一条注意事项，系统就会调用loadView方法，这样就会引起死循环。所以，为了避免死循环，我们最迟要在viewDidLoad方法中结束self.view是nil的状态。
++ 永远不要主动调用loadView方法。
