@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "产品效率提升"
+title:      "如何提升产品效率"
 subtitle:   "Product，Efficiency，归纳笔记"
 date:       2018-04-15
 author:     "Alla"
