@@ -123,7 +123,7 @@ tags:
 
 ![iOS Render Process](/img/20180331/iOS%20Render%20Process.png)
 
-下面以iOS系统为例，
+<!--下面以iOS系统为例，
 * 在APP内部有4个阶段：
     1. 布局：在这个阶段，程序设置 View / Layer 的层级信息，设置 layer 的属性。
     2. 创建 backing image：在这个阶段程序会创建 layer 的 backing image，无论是通过 setContents 将一个 image 传給 layer，还是通过 [drawRect:] 或 [drawLayer: inContext:] 来画出来的。所以 [drawRect:] 等函数是在这个阶段被调用的。
@@ -132,7 +132,7 @@ tags:
 * 在APP外部有2个阶段：
 当这些数据到达 render server 后，会被反序列化成 render tree。然后 render server 会做下面的两件事：
 1. 根据 layer 的各种属性（如果是动画的，会计算动画 layer 的属性的中间值），用 OpenGL 准备渲染。
-2. 渲染这些可视的 layer 到屏幕。
+2. 渲染这些可视的 layer 到屏幕。-->
 
 # 五、影响显示性能的因素
 从上面介绍的原理，我们不难看出，界面显示的过程主要是CPU和GPU协同工作的过程。所以CPU和GPU的负载均衡是影响界面显示性能的关键指标。下面分别阐述两者资源消耗的原因和常规的解决方案：
