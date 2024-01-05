@@ -2,7 +2,7 @@
     "name": "alla-blog",
     "title": "Alla Blog",
     "version": "1.0.0",
-    "homepage": "http://cocoacitizen.github.io",
+    "homepage": "https://fenn2048.github.io",
     "author": "Alla",
     "devDependencies": {
         "grunt": "~0.4.5",
@@ -13,7 +13,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/cocoacitizen/cocoacitizen.github.io"
+        "url": "https://github.com/cocoacitizen/fenn2048.github.io"
     },
     "scripts": {
         "preview": "cd _site; python -m SimpleHTTPServer 8020",

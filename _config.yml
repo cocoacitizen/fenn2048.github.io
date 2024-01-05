@@ -5,7 +5,7 @@ header-img: img/home-bg.jpg
 email: peter@appgeek.me
 description: ""
 keyword: ""
-url: "http://cocoacitizen.github.io"              # your host, for absolute URL
+url: "https://fenn2048.github.io"              # your host, for absolute URL
 baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
 
 
